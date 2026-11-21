@@ -69,6 +69,23 @@ and random integer limits:
 
 A fixed random seed of 42 is used to make the generated inputs repeatable. A separate demonstration program prints every insertion-sort step for a sample of 10 integers.
 
+## Demonstration Output
+
+```text
+Unsorted array: [8, 3, 5, 1, 9, 6, 2, 7, 4, 0]
+Step 1: [3, 8, 5, 1, 9, 6, 2, 7, 4, 0]
+Step 2: [3, 5, 8, 1, 9, 6, 2, 7, 4, 0]
+Step 3: [1, 3, 5, 8, 9, 6, 2, 7, 4, 0]
+Step 4: [1, 3, 5, 8, 9, 6, 2, 7, 4, 0]
+Step 5: [1, 3, 5, 6, 8, 9, 2, 7, 4, 0]
+Step 6: [1, 2, 3, 5, 6, 8, 9, 7, 4, 0]
+Step 7: [1, 2, 3, 5, 6, 7, 8, 9, 4, 0]
+Step 8: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+Step 9: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+Sorted array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
 ## Correctness
 
 After each benchmark, `isSorted()` verifies that every value is less than or equal to the value following it. The correctness check is performed after timing so that it does not affect the reported sorting time.
@@ -83,15 +100,14 @@ With `p` chunks, each worker sorts approximately `n/p` elements. The combined in
 
 | File | Description |
 |---|---|
-| `sequential_sort.C` | Sequential insertion-sort benchmark |
-| `multithreading.c` | POSIX pthreads implementation |
-| `openMP.c` | OpenMP implementation |
-| `mpi.c` | MPI implementation |
-| `demo.c` | Small insertion-sort demonstration with step output |
-| `plots.py` | Generates performance graphs from the CSV files |
+| `methods/sequential_sort.C` | Sequential insertion-sort benchmark |
+| `methods/multithreading.c` | POSIX pthreads implementation |
+| `methods/openMP.c` | OpenMP implementation |
+| `methods/mpi.c` | MPI implementation |
+| `methods/demo.c` | Small insertion-sort demonstration with step output |
 | `run_test.sh` | Slurm batch script for running the benchmarks |
-| `*_results.csv` | Recorded benchmark results |
-| `*.png` | Generated performance graphs |
+| `results/*.csv` | Recorded benchmark results |
+| `all_methods_comparison.png` | Performance-comparison graph |
 
 ## Requirements
 
@@ -99,8 +115,6 @@ With `p` chunks, each worker sorts approximately `n/p` elements. The combined in
 - POSIX threads
 - OpenMP
 - OpenMPI or another MPI implementation
-- Python 3
-- Matplotlib
 - Slurm, when running on the HPC cluster
 
 ## Compilation and Local Execution
@@ -110,21 +124,21 @@ With `p` chunks, each worker sorts approximately `n/p` elements. The combined in
 The uppercase `.C` extension may be interpreted as C++, so `-x c` explicitly selects C:
 
 ```bash
-gcc -x c -O2 sequential_sort.C -o sequential_sort
+gcc -x c -O2 methods/sequential_sort.C -o sequential_sort
 ./sequential_sort
 ```
 
 ### Pthreads
 
 ```bash
-gcc -O2 -pthread multithreading.c -o multithreading
+gcc -O2 -pthread methods/multithreading.c -o multithreading
 ./multithreading
 ```
 
 ### OpenMP
 
 ```bash
-gcc -O2 -fopenmp openMP.c -o openMP
+gcc -O2 -fopenmp methods/openMP.c -o openMP
 export OMP_NUM_THREADS=10
 ./openMP
 ```
@@ -132,7 +146,7 @@ export OMP_NUM_THREADS=10
 ### MPI
 
 ```bash
-mpicc -O2 mpi.c -o mpi
+mpicc -O2 methods/mpi.c -o mpi
 mpirun -np 10 ./mpi
 ```
 
@@ -175,17 +189,7 @@ The following graph compares the execution times of Sequential C, pthreads, Open
 
 ![Insertion sort performance comparison](all_methods_comparison.png)
 
-### MPI Performance
-
-The MPI graph shows how execution time changes as the array size and random integer limit increase.
-
-![MPI C performance](mpi_c_performance.png)
-
-The graphs are generated from the benchmark CSV files using `plots.py`. To regenerate them after running new benchmarks, execute:
-
-```bash
-python3 plots.py
-```
+The raw measurements used for the comparison are stored in the `results` directory.
 
 ## Speedup Interpretation
 
