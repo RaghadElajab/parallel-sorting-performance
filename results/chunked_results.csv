@@ -1,0 +1,26 @@
+Array Size,Random Limit,Method,Workers,Time,Correct
+1000,100,Sequential Chunked,1,0.000057,True
+1000,1000,Sequential Chunked,1,0.000048,True
+1000,10000,Sequential Chunked,1,0.000046,True
+1000,100000,Sequential Chunked,1,0.000046,True
+1000,1000000,Sequential Chunked,1,0.000046,True
+10000,100,Sequential Chunked,1,0.001895,True
+10000,1000,Sequential Chunked,1,0.001930,True
+10000,10000,Sequential Chunked,1,0.001950,True
+10000,100000,Sequential Chunked,1,0.001940,True
+10000,1000000,Sequential Chunked,1,0.002242,True
+100000,100,Sequential Chunked,1,0.168450,True
+100000,1000,Sequential Chunked,1,0.169459,True
+100000,10000,Sequential Chunked,1,0.170492,True
+100000,100000,Sequential Chunked,1,0.170360,True
+100000,1000000,Sequential Chunked,1,0.170227,True
+1000000,100,Sequential Chunked,1,16.575147,True
+1000000,1000,Sequential Chunked,1,16.717271,True
+1000000,10000,Sequential Chunked,1,16.737632,True
+1000000,100000,Sequential Chunked,1,16.747251,True
+1000000,1000000,Sequential Chunked,1,16.747086,True
+10000000,100,Sequential Chunked,1,1674.887157,True
+10000000,1000,Sequential Chunked,1,1715.012864,True
+10000000,10000,Sequential Chunked,1,2121.193921,True
+10000000,100000,Sequential Chunked,1,1983.857710,True
+10000000,1000000,Sequential Chunked,1,2091.007219,True

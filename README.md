@@ -69,23 +69,6 @@ and random integer limits:
 
 A fixed random seed of 42 is used to make the generated inputs repeatable. A separate demonstration program prints every insertion-sort step for a sample of 10 integers.
 
-## Demonstration Output
-
-```text
-Unsorted array: [8, 3, 5, 1, 9, 6, 2, 7, 4, 0]
-Step 1: [3, 8, 5, 1, 9, 6, 2, 7, 4, 0]
-Step 2: [3, 5, 8, 1, 9, 6, 2, 7, 4, 0]
-Step 3: [1, 3, 5, 8, 9, 6, 2, 7, 4, 0]
-Step 4: [1, 3, 5, 8, 9, 6, 2, 7, 4, 0]
-Step 5: [1, 3, 5, 6, 8, 9, 2, 7, 4, 0]
-Step 6: [1, 2, 3, 5, 6, 8, 9, 7, 4, 0]
-Step 7: [1, 2, 3, 5, 6, 7, 8, 9, 4, 0]
-Step 8: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-Step 9: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-Sorted array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-```
-
 ## Correctness
 
 After each benchmark, `isSorted()` verifies that every value is less than or equal to the value following it. The correctness check is performed after timing so that it does not affect the reported sorting time.
