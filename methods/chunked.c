@@ -35,6 +35,136 @@ IntArray insertionSort(IntArray input) //sequential insertionsort implementation
     }
     return sorted;
 }
+// Divide the input array into nearly equal chunks
+IntArray *splitArray( IntArray input,int workerCount)
+{
+    IntArray *chunks = malloc( workerCount * sizeof(IntArray) );
+
+    int basicSize = input.size / workerCount;
+    int extraItems = input.size % workerCount;
+    int start = 0;
+
+    for ( int workerId = 0; workerId < workerCount; workerId++)
+    {
+        int chunkSize = basicSize;
+
+        // Give one extra value to the first few chunks
+        if (workerId < extraItems)
+        {
+            chunkSize++;
+        }
+
+        chunks[workerId].size = chunkSize;
+        chunks[workerId].numbers = malloc( chunkSize * sizeof(int) );
+
+        // Copy this section of the input into the chunk
+        memcpy( chunks[workerId].numbers, &input.numbers[start], chunkSize * sizeof(int));
+        start += chunkSize;
+    }
+
+    return chunks;
+}
+IntArray mergeTwoArrays( IntArray leftArray, IntArray rightArray)//merge two sorted arrays into one sorted array
+{
+    IntArray mergedArray;
+    mergedArray.size = leftArray.size + rightArray.size;
+    mergedArray.numbers = malloc( mergedArray.size * sizeof(int));
+    int left = 0;
+    int right = 0;
+    int merged = 0;
+
+    while ( left < leftArray.size &&right < rightArray.size) //repeatedly copy the smaller available value
+    {
+        if (leftArray.numbers[left] <=rightArray.numbers[right])
+        {
+            mergedArray.numbers[merged] = leftArray.numbers[left];
+            left++;
+        }
+        else
+        {
+            mergedArray.numbers[merged] =  rightArray.numbers[right];
+            right++;
+        }
+        merged++;
+    }
+    while (left < leftArray.size) //copy any remaining values from the left array
+    {
+        mergedArray.numbers[merged] = leftArray.numbers[left];
+        left++;
+        merged++;
+    }
+    while (right < rightArray.size) //copy any remaining values from the right array
+    {
+        mergedArray.numbers[merged] = rightArray.numbers[right];
+        right++;
+        merged++;
+    }
+    return mergedArray;
+}
+
+IntArray mergeAllArrays(IntArray *sortedChunks, int chunkCount) //repeatedly merge pairs of chunks until one array remains
+{
+    while (chunkCount > 1)
+    {
+        int mergedCount = (chunkCount + 1) / 2;
+        IntArray *mergedChunks = malloc(mergedCount * sizeof(IntArray));
+        int mergedId = 0;
+        for ( int chunkId = 0;  chunkId < chunkCount;   chunkId += 2 )
+        {
+            if (chunkId + 1 < chunkCount)
+            {
+                mergedChunks[mergedId] = mergeTwoArrays( sortedChunks[chunkId],  sortedChunks[chunkId + 1]); //mrge the current pair of chunks
+                
+                free(sortedChunks[chunkId].numbers);// The old chunks are no longer needed
+                free(sortedChunks[chunkId + 1].numbers);
+            }
+            else
+            {              
+                mergedChunks[mergedId] =sortedChunks[chunkId];//move an unpaired final chunk to the next round
+            }
+            mergedId++;
+        }
+        free(sortedChunks);
+        sortedChunks = mergedChunks;
+        chunkCount = mergedCount;
+    }
+    IntArray result = sortedChunks[0];
+    free(sortedChunks);
+    return result;
+}
+
+
+int isSorted(IntArray array)
+{
+    for (int index = 1; index < array.size; index++)
+    {
+        if (array.numbers[index - 1] > array.numbers[index] )
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+
+void printArray(IntArray array)
+{
+    printf("[");
+
+    for (int index = 0; index < array.size; index++)
+    {
+        printf("%d", array.numbers[index]);
+
+        if (index < array.size - 1)
+        {
+            printf(", ");
+        }
+    }
+
+    printf("]\n");
+}
+
 // Sort chunks sequentially before merging them
 IntArray sequentialChunkedInsertionSort(IntArray input, int chunkCount)
 {
