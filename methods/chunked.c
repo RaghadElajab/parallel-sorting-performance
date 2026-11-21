@@ -15,7 +15,26 @@ double getTime() //function returns the current system time in seconds
     clock_gettime(CLOCK_MONOTONIC, &currentTime );
     return currentTime.tv_sec +  currentTime.tv_nsec/1000000000.0;
 }
+IntArray insertionSort(IntArray input) //sequential insertionsort implementation
+{
+    IntArray sorted; //prep: allocating memory and copying input array
+    sorted.size = input.size;
+    sorted.numbers = malloc(sorted.size * sizeof(int));
+    memcpy(sorted.numbers,input.numbers, sorted.size * sizeof(int));
 
+    for (int cur = 1; cur < sorted.size; cur++) //start at the second element because the first is already sorted
+    {
+        int val = sorted.numbers[cur];//value to be inserted
+        int prev = cur - 1; //begin comparing with the element before the current value
+        while ( prev >= 0 && sorted.numbers[prev] > val) //shift larger values one position to the right
+        {
+            sorted.numbers[prev+1]= sorted.numbers[prev];
+            prev--;
+        }
+        sorted.numbers[prev+1] = val;//insert the current value into its correct position
+    }
+    return sorted;
+}
 // Sort chunks sequentially before merging them
 IntArray sequentialChunkedInsertionSort(IntArray input, int chunkCount)
 {
